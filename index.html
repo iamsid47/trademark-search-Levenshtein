@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat Widget</title>
+    <!-- Include any necessary CSS styles or libraries here -->
+  </head>
+  <body>
+    <div id="chat-container">
+      <div id="chat-log"></div>
+      <input type="text" id="user-input" />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+    <!-- Include any necessary JavaScript libraries here -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      function sendMessage() {
+        // Get user input
+        var userMessage = $("#user-input").val();
+
+        // Send user input to Flask API
+        $.ajax({
+          url: "http://127.0.0.1:5000/api/send_message", // Endpoint of your Flask API
+          type: "POST",
+          data: JSON.stringify({ message: userMessage }),
+          contentType: "application/json",
+          success: function (data) {
+            // Update chat log with AI response
+            $("#chat-log").append("<p>User: " + userMessage + "</p>");
+            $("#chat-log").append("<p>AI: " + data.response + "</p>");
+            // Clear user input
+            $("#user-input").val("");
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

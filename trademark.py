@@ -7,15 +7,10 @@ from PIL import Image
 import base64
 
 def string_similarity(str1, str2):
-    """
-    Calculates the similarity between two strings using Levenshtein distance.
-    Returns a similarity score between 0 and 100.
-    """
-    # Convert the strings to lowercase for case-insensitive comparison
+
     str1 = str1.lower() if str1 else ""
     str2 = str2.lower()
 
-    # Calculate Levenshtein distance between the two strings
     distance = Levenshtein.distance(str1, str2)
 
     # Calculate similarity score as a percentage of characters that match
@@ -25,12 +20,7 @@ def string_similarity(str1, str2):
     return similarity_score
 
 def check_similarity(str1, csv_file):
-    """
-    Checks similarity between a given string and trademark names in a CSV file.
-    Prints all the trademark names that have a similarity score of more than 30%,
-    and also plots the similarity scores using matplotlib with trademark names as labels
-    for trademarks with similarity score above 60%.
-    """
+
     trademark_names = []  # List to store trademark names for labeling in the plot
     similarity_scores = []  # List to store similarity scores for plotting
     with open(csv_file, newline='') as file:

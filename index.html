@@ -48,6 +48,7 @@
             Search Trademark
           </button>
         </div>
+        <div id="plotContainer"></div>
       </div>
     </section>
     <script>
@@ -58,21 +59,22 @@
       searchBtn.addEventListener("click", async () => {
         const data = {
           str1: trademarkInput.value,
-          //goods: goodsInput.value,
         };
-        const response = await fetch(
-          "http://127.0.0.1:5000/get_similarity_plot",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(data),
-          }
-        );
+        const response = await fetch("http://127.0.0.1:5000/plot", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
         const responseData = await response.json();
-        console.log(responseData);
-        // Handle the response data as required
+        if (responseData.status === "success") {
+          const imageSrc = `data:image/png;base64,${responseData.image}`;
+          const plotContainer = document.getElementById("plotContainer");
+          plotContainer.innerHTML = `<img src="${imageSrc}" alt="Generated Plot">`;
+        } else {
+          console.log(responseData);
+        }
       });
     </script>
   </body>

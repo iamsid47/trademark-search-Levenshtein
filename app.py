@@ -1,7 +1,7 @@
 import csv
 import Levenshtein
 import matplotlib.pyplot as plt
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, render_template
 from flask_cors import CORS
 import matplotlib
 matplotlib.use('Agg')
@@ -77,6 +77,11 @@ def image_to_base64(file_path):
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/')
+def home():
+    return render_template("index.html")
+
 
 @app.route('/plot', methods=['POST'])
 def get_plot():

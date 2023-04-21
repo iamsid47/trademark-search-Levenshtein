@@ -1,72 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css" />
+    <title>Trademark Search</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="style.css" />
-  <title>Trademark Search</title>
-</head>
+  <body class="tracking-tighter">
+    <section>
+      <div class="p-4 m-4">
+        <h1 class="text-4xl font-bold">Trademark Search</h1>
+      </div>
+    </section>
+    <section>
+      <div class="max-w-3xl p-3 m-5">
+        <div class="p-3 m-3 bg-gray-100 rounded-lg">
+          <h1 class="text-2xl font-semibold">Jurisdiction</h1>
+          <input
+            type="text"
+            class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg"
+          />
+        </div>
+        <div class="p-3 m-3 bg-gray-100 rounded-lg">
+          <h1 class="text-2xl font-semibold">Trademark</h1>
+          <input
+            id="trademarkInput"
+            type="text"
+            class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg"
+          />
+        </div>
+        <div class="p-3 m-3 bg-gray-100 rounded-lg">
+          <h1 class="text-2xl font-semibold">Goods and Services</h1>
+          <input
+            id="goodsInput"
+            type="text"
+            class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg"
+          />
+        </div>
+        <div class="my-4 mx-3">
+          <button
+            id="searchBtn"
+            type="submit"
+            class="px-4 py-3 font-semibold text-xl bg-blue-500 hover:cursor-pointer text-white rounded"
+          >
+            Search Trademark
+          </button>
+        </div>
+        <div id="plotContainer"></div>
+      </div>
+    </section>
+    <script>
+      const searchBtn = document.getElementById("searchBtn");
+      const trademarkInput = document.getElementById("trademarkInput");
+      const goodsInput = document.getElementById("goodsInput");
 
-<body class="tracking-tighter">
-  <section>
-    <div class="p-4 m-4">
-      <h1 class="text-4xl font-bold">Trademark Search</h1>
-    </div>
-  </section>
-  <section>
-    <div class="max-w-3xl p-3 m-5">
-      <div class="p-3 m-3 bg-gray-100 rounded-lg">
-        <h1 class="text-2xl font-semibold">Jurisdiction</h1>
-        <input type="text" class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg" />
-      </div>
-      <div class="p-3 m-3 bg-gray-100 rounded-lg">
-        <h1 class="text-2xl font-semibold">Trademark</h1>
-        <input id="trademarkInput" type="text" class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg" />
-      </div>
-      <div class="p-3 m-3 bg-gray-100 rounded-lg">
-        <h1 class="text-2xl font-semibold">Goods and Services</h1>
-        <input id="goodsInput" type="text" class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg" />
-      </div>
-      <div class="my-4 mx-3">
-        <button id="searchBtn" type="submit"
-          class="px-4 py-3 font-semibold text-xl bg-blue-500 hover:cursor-pointer text-white rounded">
-          Search Trademark
-        </button>
-      </div>
-      <div id="plotContainer"></div>
-    </div>
-  </section>
-  <script>
-    const searchBtn = document.getElementById("searchBtn");
-    const trademarkInput = document.getElementById("trademarkInput");
-    const goodsInput = document.getElementById("goodsInput");
+      searchBtn.addEventListener("click", async () => {
+        const data = {
+          str1: trademarkInput.value,
+        };
+        const response = await fetch("http://127.0.0.1:5000/plot", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        const responseData = await response.json();
+        console.log(responseData.image_b64);
+        const imageSrc = `data:image/png;charset=utf-8;base64,${responseData.image_b64}`;
+        const plotContainer = document.getElementById("plotContainer");
+        plotContainer.innerHTML = `<img src="${imageSrc}" alt="Generated Plot">`;
 
-    searchBtn.addEventListener("click", async () => {
-      const data = {
-        str1: trademarkInput.value,
-      };
-      const response = await fetch("http://127.0.0.1:5000/plot", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
+        const newWindow = window.open("", "_blank");
+        newWindow.document.write(
+          `<html><body><img src="data:image/png;base64,${responseData.image_b64}" /></body></html>`
+        );
       });
-      const responseData = await response.json();
-      console.log(responseData.image_b64)
-      const imageSrc = `data:image/png;charset=utf-8;base64,${responseData.image_b64}`;
-      const plotContainer = document.getElementById("plotContainer");
-      plotContainer.innerHTML = `<img src="${imageSrc}" alt="Generated Plot">`;
-
-      const newWindow = window.open("", "_blank");
-      newWindow.document.write(
-        `<html><body><img src="data:image/png;base64,${responseData.image_b64}" /></body></html>`
-      );
-    });
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>

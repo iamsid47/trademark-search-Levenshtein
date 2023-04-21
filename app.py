@@ -82,6 +82,10 @@ CORS(app)
 def home():
     return render_template("index.html")
 
+@app.route('/reportGen2')
+def reportGen2():
+    return render_template("reportGen2.html")
+
 
 @app.route('/plot', methods=['POST'])
 def get_plot():

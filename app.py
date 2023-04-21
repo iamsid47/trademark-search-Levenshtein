@@ -53,8 +53,9 @@ def check_similarity(str1, csv_file):
         plt.savefig(buf, dpi=100, format='png')
         plt.clf()
         buf.seek(0) 
-        plot_bytes = buf.getvalue()
-        #plt.show()
+        plot_bytes = base64.b64encode(buf.getvalue()).decode('utf-8')
+        print(plot_bytes)
+        # plt.show()
 
                 
     else:
@@ -86,7 +87,8 @@ def get_plot():
     time.sleep(3)
     # Return the byte string as a response with content type 'image/png'
     if plot_bytes != None:
-        return Response(plot_bytes, mimetype='image/png')
+
+        return jsonify({"image_b64":plot_bytes})
     else:
         return Response('No trademarks found with similarity above 50%', mimetype='text/plain')
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat Widget</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <section
+      class="max-w-3xl bg-gray-100 border-2 border-solid border-blue-300 p-4 m-4 rounded-lg"
+    >
+      <div
+        id="chat-container"
+        class="bg-blue-100 px-4 pb-4 pt-24 mx-3 rounded overflow-visible"
+      >
+        <div id="chat-log"></div>
+        <input type="text" id="user-input" />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      function sendMessage() {
+        var userMessage = $("#user-input").val();
+
+        $.ajax({
+          url: "http://127.0.0.1:5000/api/send_message",
+          type: "POST",
+          data: JSON.stringify({ message: userMessage }),
+          contentType: "application/json",
+          success: function (data) {
+            $("#chat-log").append("<p>User: " + userMessage + "</p>");
+            $("#chat-log").append("<p>AI: " + data.response + "</p>");
+            $("#user-input").val("");
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -22,12 +22,15 @@ def string_similarity(str1, str2):
     max_len = max(len(str1), len(str2))
     similarity_score = (1 - (distance / max_len)) * 100
 
+    similarity_score = int(similarity_score)
     return similarity_score
 
 def check_similarity(str1, csv_file):
-
+    global trademarks
+    trademarks = []
     trademark_names = []  # List to store trademark names for labeling in the plot
     similarity_scores = []  # List to store similarity scores for plotting
+    adjacent_cells = []
     with open(csv_file, newline='') as file:
         reader = csv.reader(file)
         #next(reader)  # Skip the header row
@@ -36,14 +39,20 @@ def check_similarity(str1, csv_file):
             similarity_score = string_similarity(str1, trademark_name)
             if similarity_score > 60:
                 print(f"'{trademark_name}' has a similarity score of {similarity_score}%")
+                adjacent_cell = row[1]
+                print(f"Adjacent cell: {adjacent_cell}")
+                trademarks.append([trademark_name, similarity_score, adjacent_cell])
+
             if similarity_score > 60:  # Add trademark name to the list only if similarity score > 60%
                 trademark_names.append(trademark_name)
                 similarity_scores.append(similarity_score)
+                adjacent_cells.append(adjacent_cell)
+    
 
     # Plot the similarity scores with trademark names as labels for trademarks with similarity score > 60%
     if trademark_names:
         global buf, plot_bytes
-        plt.plot(similarity_scores)
+        plt.plot(similarity_scores, "ro")
         plt.xlabel('Trademark Index')
         plt.ylabel('Similarity Score')
         plt.title(f'Similarity Scores for "{str1}" in the CSV file')
@@ -54,7 +63,7 @@ def check_similarity(str1, csv_file):
         plt.clf()
         buf.seek(0) 
         plot_bytes = base64.b64encode(buf.getvalue()).decode('utf-8')
-        print(plot_bytes)
+        #print(plot_bytes)
         # plt.show()
 
                 
@@ -96,8 +105,7 @@ def get_plot():
     time.sleep(3)
     # Return the byte string as a response with content type 'image/png'
     if plot_bytes != None:
-
-        return jsonify({"image_b64":plot_bytes})
+        return jsonify({"image_b64":plot_bytes, "details" : trademarks})
     else:
         return Response('No trademarks found with similarity above 50%', mimetype='text/plain')
 

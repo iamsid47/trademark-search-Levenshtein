@@ -9,23 +9,27 @@
     <title>Trademark Search</title>
   </head>
 
-  <body class="tracking-tighter">
-    <section>
+  <body class="tracking-tighter scroll-smooth">
+    <section class="bg-yellow-100 p-4">
       <div class="p-4 m-4">
-        <h1 class="text-4xl font-bold">Trademark Search</h1>
+        <h1 class="text-4xl font-bold text-red-600">Trademark Search</h1>
       </div>
     </section>
     <section>
       <div class="max-w-3xl p-3 m-5">
+        <h1 class="mx-3 my-6 text-4xl font-semibold">
+          Check for similarities for your trademark
+        </h1>
         <div class="p-3 m-3 bg-gray-100 rounded-lg">
-          <h1 class="text-2xl font-semibold">Jurisdiction</h1>
-          <input
-            type="text"
+          <h1 class="text-xl font-medium">Select A Jurisdiction</h1>
+          <p
             class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg"
-          />
+          >
+            USA
+          </p>
         </div>
         <div class="p-3 m-3 bg-gray-100 rounded-lg">
-          <h1 class="text-2xl font-semibold">Trademark</h1>
+          <h1 class="text-xl font-medium">Trademark</h1>
           <input
             id="trademarkInput"
             type="text"
@@ -33,7 +37,7 @@
           />
         </div>
         <div class="p-3 m-3 bg-gray-100 rounded-lg">
-          <h1 class="text-2xl font-semibold">Goods and Services</h1>
+          <h1 class="text-xl font-medium">Goods and Services</h1>
           <input
             id="goodsInput"
             type="text"
@@ -49,10 +53,21 @@
             Search Trademark
           </button>
         </div>
-        <div>
-          <a href="/reportGen2">Click Here</a>
+
+        <div id="plotContainer" class="mt-4"></div>
+        <div class="mt-5">
+          <h2 class="py-3 mb-3 text-3xl font-semibold">Trademark Details</h2>
+          <table id="trademark-table">
+            <thead>
+              <tr>
+                <th>Trademark Name</th>
+                <th>Similarity Score</th>
+                <th>Adjacent Cell</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
-        <div id="plotContainer"></div>
       </div>
     </section>
     <script>
@@ -77,10 +92,39 @@
         const plotContainer = document.getElementById("plotContainer");
         plotContainer.innerHTML = `<img src="${imageSrc}" alt="Generated Plot">`;
 
-        const newWindow = window.open("", "_blank");
-        newWindow.document.write(
-          `<html><body><img src="data:image/png;base64,${responseData.image_b64}" /></body></html>`
-        );
+        const details = responseData.details;
+
+        const tbody = document.querySelector("#trademark-table tbody");
+
+        for (var i = 0; i < details.length; i++) {
+          var trademark = details[i];
+
+          // Create a new row element
+          var row = document.createElement("tr");
+
+          // Add the trademark name cell
+          var nameCell = document.createElement("td");
+          nameCell.textContent = trademark[0];
+          row.appendChild(nameCell);
+
+          // Add the similarity score cell
+          var scoreCell = document.createElement("td");
+          scoreCell.textContent = trademark[1];
+          row.appendChild(scoreCell);
+
+          // Add the adjacent cell cell
+          var adjacentCell = document.createElement("td");
+          adjacentCell.textContent = trademark[2];
+          row.appendChild(adjacentCell);
+
+          // Add the row to the table body
+          tbody.appendChild(row);
+        }
+
+        // const newWindow = window.open("", "_blank");
+        // newWindow.document.write(
+        //   `<html><head><title>Trademark Report</title></head><body><div><img src="data:image/png;base64,${responseData.image_b64}" /></div><div><p>${responseData.details}<p/></div></body></html>`
+        // );
       });
     </script>
   </body>

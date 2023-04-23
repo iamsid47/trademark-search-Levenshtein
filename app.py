@@ -10,6 +10,7 @@ import base64
 import time
 import os
 import io
+from class_check import find_similar_trademarks
 
 def string_similarity(str1, str2):
 
@@ -25,28 +26,48 @@ def string_similarity(str1, str2):
     similarity_score = int(similarity_score)
     return similarity_score
 
-def check_similarity(str1, csv_file):
-    global trademarks
+def check_similarity(str1, trademark_list):
+    global trademarks, adjacent_cell, adjacent_cells
     trademarks = []
     trademark_names = []  # List to store trademark names for labeling in the plot
     similarity_scores = []  # List to store similarity scores for plotting
     adjacent_cells = []
-    with open(csv_file, newline='') as file:
-        reader = csv.reader(file)
-        #next(reader)  # Skip the header row
-        for row in reader:
-            trademark_name = row[0]
-            similarity_score = string_similarity(str1, trademark_name)
-            if similarity_score > 60:
-                print(f"'{trademark_name}' has a similarity score of {similarity_score}%")
-                adjacent_cell = row[1]
-                print(f"Adjacent cell: {adjacent_cell}")
-                trademarks.append([trademark_name, similarity_score, adjacent_cell])
 
-            if similarity_score > 60:  # Add trademark name to the list only if similarity score > 60%
+    for tup in trademark_list:
+        trademark_name = tup[0]
+        similarity_score = string_similarity(str1, trademark_name)
+        if similarity_score > 30:
+            print(f"'{trademark_name}' has a similarity score of {similarity_score}%")
+            with open('sample.csv', newline='') as file:
+                reader = csv.reader(file)
+                for row in reader:
+                    if row[0] == trademark_name:
+                        adjacent_cell = row[1]
+                        print(f"Adjacent cell: {adjacent_cell}")
+                        adjacent_cells.append(adjacent_cell)
+            
+        if similarity_score > 30:  # Add trademark name to the list only if similarity score > 30%
                 trademark_names.append(trademark_name)
                 similarity_scores.append(similarity_score)
-                adjacent_cells.append(adjacent_cell)
+                trademarks.append([trademark_name, similarity_score, adjacent_cell])
+                
+
+    # with open(csv_file, newline='') as file:
+    #     reader = csv.reader(file)
+    #     #next(reader)  # Skip the header row
+    #     for row in reader:
+    #         trademark_name = row[0]
+    #         similarity_score = string_similarity(str1, trademark_name)
+    #         if similarity_score > 30:
+    #             print(f"'{trademark_name}' has a similarity score of {similarity_score}%")
+    #             adjacent_cell = row[1]
+    #             print(f"Adjacent cell: {adjacent_cell}")
+    #             trademarks.append([trademark_name, similarity_score, adjacent_cell])
+
+    #         if similarity_score > 30:  # Add trademark name to the list only if similarity score > 60%
+    #             trademark_names.append(trademark_name)
+    #             similarity_scores.append(similarity_score)
+    #             adjacent_cells.append(adjacent_cell)
     
 
     # Plot the similarity scores with trademark names as labels for trademarks with similarity score > 60%
@@ -70,6 +91,7 @@ def check_similarity(str1, csv_file):
     else:
         plot_bytes = None
         print("No trademarks found with similarity score above 50%.")
+
 
 def image_to_base64(file_path):
     with open(file_path, "rb") as image_file:
@@ -100,8 +122,14 @@ def reportGen2():
 def get_plot():
     data = request.json
     str1 = data.get('str1')
-    csv_file = 'trademarks.csv'
-    check_similarity(str1, csv_file)
+    str2 = data.get('str2')
+    
+    trademark_list = find_similar_trademarks(str2)
+
+    #csv_file = 'sample.csv'
+
+    check_similarity(str1, trademark_list)
+
     time.sleep(3)
     # Return the byte string as a response with content type 'image/png'
     if plot_bytes != None:
@@ -110,29 +138,30 @@ def get_plot():
         return Response('No trademarks found with similarity above 50%', mimetype='text/plain')
 
 
-@app.route('/get_similarity_plot', methods=['POST'])
-def get_similarity_plot():
-    try:
-        #str1 = request.headers.get('str1')
-        # Specify the file path to the CSV file
-        data = request.json
-        str1 = data.get('str1')
-
-        csv_file = 'trademarks.csv'
-
-        check_similarity(str1, csv_file)
-
-        time.sleep(4)
-        
-        encoded_image = image_to_base64("sim.png")
-
-        if encoded_image:
-            return jsonify({'status': 'success', 'image': encoded_image})
-        else:
-            return jsonify({'status': 'success', 'message': 'No trademarks found with similarity score above 50%.'}), 400
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+# @app.route('/get_similarity_plot', methods=['POST'])
+# def get_similarity_plot():
+#     try:
+#         #str1 = request.headers.get('str1')
+#         # Specify the file path to the CSV file
+#         data = request.json
+#         str1 = data.get('str1')
+
+#         csv_file = 'trademarks.csv'
+
+#         check_similarity(str1, csv_file)
+
+#         time.sleep(4)
+        
+#         encoded_image = image_to_base64("sim.png")
+
+#         if encoded_image:
+#             return jsonify({'status': 'success', 'image': encoded_image})
+#         else:
+#             return jsonify({'status': 'success', 'message': 'No trademarks found with similarity score above 50%.'}), 400
+#     except Exception as e:
+#         return jsonify({'status': 'error', 'message': str(e)}), 500
+

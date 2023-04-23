@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="../static/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <title>Trademark Search</title>
   </head>
 
@@ -34,6 +37,7 @@
             id="trademarkInput"
             type="text"
             class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg"
+            placeholder="Enter Trademark Name"
           />
         </div>
         <div class="p-3 m-3 bg-gray-100 rounded-lg">
@@ -42,15 +46,22 @@
             id="goodsInput"
             type="text"
             class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg"
+            placeholder="Enter Class Number or Keyword"
           />
         </div>
         <div class="my-4 mx-3">
           <button
             id="searchBtn"
             type="submit"
-            class="px-4 py-3 font-semibold text-xl bg-blue-500 hover:cursor-pointer text-white rounded"
+            class="px-4 py-3 font-semibold text-xl bg-blue-500 hover:cursor-pointer text-white rounded hover:bg-blue-700 transition duration-200"
           >
             Search Trademark
+          </button>
+          <button
+            onclick="downloadAsPDF()"
+            class="px-4 py-3 mx-4 font-semibold text-xl bg-white hover:cursor-pointer text-black rounded hover:bg-gray-900 hover:text-white transition duration-200"
+          >
+            Download PDF
           </button>
         </div>
 
@@ -62,7 +73,7 @@
               <tr>
                 <th>Trademark Name</th>
                 <th>Similarity Score</th>
-                <th>Adjacent Cell</th>
+                <th>Classification</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -78,6 +89,7 @@
       searchBtn.addEventListener("click", async () => {
         const data = {
           str1: trademarkInput.value,
+          str2: goodsInput.value,
         };
         const response = await fetch("http://127.0.0.1:5000/plot", {
           method: "POST",
@@ -95,6 +107,8 @@
         const details = responseData.details;
 
         const tbody = document.querySelector("#trademark-table tbody");
+
+        tbody.innerHTML = "";
 
         for (var i = 0; i < details.length; i++) {
           var trademark = details[i];
@@ -126,6 +140,30 @@
         //   `<html><head><title>Trademark Report</title></head><body><div><img src="data:image/png;base64,${responseData.image_b64}" /></div><div><p>${responseData.details}<p/></div></body></html>`
         // );
       });
+    </script>
+
+    <script>
+      function downloadAsPDF() {
+        window.jsPDF = window.jspdf.jsPDF;
+
+        // create a new jsPDF instance
+        const doc = new jsPDF();
+
+        // get the HTML content to be converted to PDF
+        const html = document.documentElement;
+        doc.setFont("sans-serif", "normal");
+        // convert HTML to PDF
+        doc.html(html, {
+          callback: function () {
+            // save the PDF file
+            doc.save("output.pdf");
+          },
+          x: 15,
+          y: 15,
+          width: 170,
+          windowWidth: 650,
+        });
+      }
     </script>
   </body>
 </html>

@@ -40,7 +40,7 @@
             placeholder="Enter Trademark Name"
           />
         </div>
-        <div class="p-3 m-3 bg-gray-100 rounded-lg">
+        <!-- <div class="p-3 m-3 bg-gray-100 rounded-lg">
           <h1 class="text-xl font-medium">Goods and Services</h1>
           <input
             id="goodsInput"
@@ -48,7 +48,57 @@
             class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg"
             placeholder="Enter Class Number or Keyword"
           />
+        </div> -->
+
+        <div class="p-3 m-3 bg-gray-100 rounded-lg">
+          <h1 class="text-xl font-medium">Goods and Services</h1>
+          <div class="relative w-3/4 max-w-lg p-1 m-1">
+            <div
+              class="flex justify-between overflow-hidden rounded-md bg-white border-solid border-gray-200 border-2"
+            >
+              <input
+                type="text"
+                id="search-input"
+                class="block w-full flex-1 py-2 px-3 focus:outline-none"
+                placeholder="Start Typing..."
+              />
+            </div>
+            <input
+              type="hidden"
+              name="selected-class"
+              id="selected-class"
+              value=""
+            />
+
+            <div
+              id="class-list"
+              class="absolute mt-2 w-full overflow-hidden rounded-md bg-white"
+            >
+              <div
+                class="cursor-pointer py-2 px-3 hover:bg-slate-100 class-item hidden"
+                data-class="Food and Ingredients"
+              >
+                <p class="text-sm font-medium text-gray-600">Class 29</p>
+                <p class="text-sm text-gray-500">Food and Ingredients</p>
+              </div>
+              <div
+                class="cursor-pointer py-2 px-3 hover:bg-slate-100 class-item hidden"
+                data-class="Automobiles"
+              >
+                <p class="text-sm font-medium text-gray-600">Class 12</p>
+                <p class="text-sm text-gray-500">Automobiles</p>
+              </div>
+              <div
+                class="cursor-pointer py-2 px-3 hover:bg-slate-100 class-item hidden"
+                data-class="Leather Goods"
+              >
+                <p class="text-sm font-medium text-gray-600">Class 18</p>
+                <p class="text-sm text-gray-500">Leather Goods</p>
+              </div>
+            </div>
+          </div>
         </div>
+
         <div class="my-4 mx-3">
           <button
             id="searchBtn"
@@ -81,6 +131,73 @@
         </div>
       </div>
     </section>
+
+    <script>
+      function downloadAsPDF() {
+        window.jsPDF = window.jspdf.jsPDF;
+
+        // create a new jsPDF instance
+        const doc = new jsPDF();
+
+        // get the HTML content to be converted to PDF
+        const html = document.documentElement;
+        doc.setFont("sans-serif", "normal");
+        // convert HTML to PDF
+        doc.html(html, {
+          callback: function () {
+            // save the PDF file
+            doc.save("output.pdf");
+          },
+          x: 15,
+          y: 15,
+          width: 170,
+          windowWidth: 650,
+        });
+      }
+    </script>
+
+    <script>
+      const searchInput = document.getElementById("search-input");
+      const classList = document.querySelectorAll(".class-item");
+      const selectedClass = document.getElementById("selected-class");
+
+      let selectionMade = false;
+
+      searchInput.addEventListener("input", () => {
+        const query = searchInput.value.trim().toLowerCase();
+
+        classList.forEach((classItem) => {
+          const classData = classItem.dataset.class.toLowerCase();
+
+          if (classData.includes(query)) {
+            classItem.style.display = "block";
+            classItem.addEventListener("click", (e) => {
+              selectedClass.value = e.currentTarget.dataset.class;
+              searchInput.value = selectedClass.value;
+              selectionMade = true;
+              hideSuggestions();
+            });
+          } else {
+            classItem.style.display = "none";
+          }
+        });
+      });
+
+      searchInput.addEventListener("blur", () => {
+        if (!selectionMade) {
+          showSuggestions();
+        }
+      });
+
+      function hideSuggestions() {
+        document.getElementById("class-list").classList.add("hidden");
+      }
+
+      function showSuggestions() {
+        document.getElementById("class-list").classList.remove("hidden");
+      }
+    </script>
+
     <script>
       const searchBtn = document.getElementById("searchBtn");
       const trademarkInput = document.getElementById("trademarkInput");
@@ -89,7 +206,7 @@
       searchBtn.addEventListener("click", async () => {
         const data = {
           str1: trademarkInput.value,
-          str2: goodsInput.value,
+          str2: selectedClass.value,
         };
         const response = await fetch("http://127.0.0.1:5000/plot", {
           method: "POST",
@@ -140,30 +257,6 @@
         //   `<html><head><title>Trademark Report</title></head><body><div><img src="data:image/png;base64,${responseData.image_b64}" /></div><div><p>${responseData.details}<p/></div></body></html>`
         // );
       });
-    </script>
-
-    <script>
-      function downloadAsPDF() {
-        window.jsPDF = window.jspdf.jsPDF;
-
-        // create a new jsPDF instance
-        const doc = new jsPDF();
-
-        // get the HTML content to be converted to PDF
-        const html = document.documentElement;
-        doc.setFont("sans-serif", "normal");
-        // convert HTML to PDF
-        doc.html(html, {
-          callback: function () {
-            // save the PDF file
-            doc.save("output.pdf");
-          },
-          x: 15,
-          y: 15,
-          width: 170,
-          windowWidth: 650,
-        });
-      }
     </script>
   </body>
 </html>

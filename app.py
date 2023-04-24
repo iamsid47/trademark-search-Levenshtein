@@ -113,9 +113,9 @@ CORS(app)
 def home():
     return render_template("index.html")
 
-@app.route('/reportGen2')
-def reportGen2():
-    return render_template("reportGen2.html")
+@app.route('/downloadAsPDF.js')
+def downloadAsPDF():
+    return render_template("download.js")
 
 
 @app.route('/plot', methods=['POST'])

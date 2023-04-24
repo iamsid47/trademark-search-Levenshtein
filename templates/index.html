@@ -40,15 +40,6 @@
             placeholder="Enter Trademark Name"
           />
         </div>
-        <!-- <div class="p-3 m-3 bg-gray-100 rounded-lg">
-          <h1 class="text-xl font-medium">Goods and Services</h1>
-          <input
-            id="goodsInput"
-            type="text"
-            class="border-2 border-solid border-gray-300 w-3/4 p-1 m-2 rounded-lg"
-            placeholder="Enter Class Number or Keyword"
-          />
-        </div> -->
 
         <div class="p-3 m-3 bg-gray-100 rounded-lg">
           <h1 class="text-xl font-medium">Goods and Services</h1>
@@ -72,30 +63,8 @@
 
             <div
               id="class-list"
-              class="absolute mt-2 w-full overflow-hidden rounded-md bg-white"
-            >
-              <div
-                class="cursor-pointer py-2 px-3 hover:bg-slate-100 class-item hidden"
-                data-class="Food and Ingredients"
-              >
-                <p class="text-sm font-medium text-gray-600">Class 29</p>
-                <p class="text-sm text-gray-500">Food and Ingredients</p>
-              </div>
-              <div
-                class="cursor-pointer py-2 px-3 hover:bg-slate-100 class-item hidden"
-                data-class="Automobiles"
-              >
-                <p class="text-sm font-medium text-gray-600">Class 12</p>
-                <p class="text-sm text-gray-500">Automobiles</p>
-              </div>
-              <div
-                class="cursor-pointer py-2 px-3 hover:bg-slate-100 class-item hidden"
-                data-class="Leather Goods"
-              >
-                <p class="text-sm font-medium text-gray-600">Class 18</p>
-                <p class="text-sm text-gray-500">Leather Goods</p>
-              </div>
-            </div>
+              class="absolute mt-2 w-full overflow-y-scroll rounded-md bg-white max-h-48"
+            ></div>
           </div>
         </div>
 
@@ -131,6 +100,307 @@
         </div>
       </div>
     </section>
+
+    <script>
+      const jsonData = [
+        {
+          ClassNo: "Class 1",
+          GoodsAndServices:
+            "Chemicals for use in industry, science and photography, as well as in agriculture, horticulture and forestry; unprocessed artificial resins, unprocessed plastics; fire extinguishing and fire prevention compositions; tempering and soldering preparations; substances for tanning animal skins and hides; adhesives for use in industry; putties and other paste fillers; compost, manures, fertilizers; biological preparations for use in industry and science.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 2",
+          GoodsAndServices:
+            "Paints, varnishes, lacquers; preservatives against rust and against deterioration of wood; colorants, dyes; inks for printing, marking and engraving; raw natural resins; metals in foil and powder form for use in painting, decorating, printing and art.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 3",
+          GoodsAndServices:
+            "Non-medicated cosmetics and toiletry preparations; non-medicated dentifrices; perfumery, essential oils; bleaching preparations and other substances for laundry use; cleaning, polishing, scouring and abrasive preparations.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 4",
+          GoodsAndServices:
+            "Industrial oils and greases, wax; lubricants; dust absorbing, wetting and binding compositions; fuels and illuminants; candles and wicks for lighting.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 5",
+          GoodsAndServices:
+            "Pharmaceuticals, medical and veterinary preparations; sanitary preparations for medical purposes; dietetic food and substances adapted for medical or veterinary use, food for babies; dietary supplements for human beings and animals; plasters, materials for dressings; material for stopping teeth, dental wax; disinfectants; preparations for destroying vermin; fungicides, herbicides.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 6",
+          GoodsAndServices:
+            "Common metals and their alloys, ores; metal materials for building and construction; transportable buildings of metal; non-electric cables and wires of common metal; small items of metal hardware; metal containers for storage or transport; safes.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 7",
+          GoodsAndServices:
+            "Machines, machine tools, power-operated tools; motors and engines, except for land vehicles; machine coupling and transmission components, except for land vehicles; agricultural implements, other than hand-operated hand tools; incubators for eggs; automatic vending machines.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 8",
+          GoodsAndServices:
+            "Hand tools and implements, hand-operated; cutlery; side arms, except firearms; razors.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 9",
+          GoodsAndServices:
+            "Scientific, research, navigation, surveying, photographic, cinematographic, audiovisual, optical, weighing, measuring, signalling, detecting, testing, inspecting, life-saving and teaching apparatus and instruments; apparatus and instruments for conducting, switching, transforming, accumulating, regulating or controlling the distribution or use of electricity; apparatus and instruments for recording, transmitting, reproducing or processing sound, images or data; recorded and downloadable media, computer software, blank digital or analogue recording and storage media; mechanisms for coin-operated apparatus; cash registers, calculating devices; computers and computer peripheral devices; diving suits, divers' masks, ear plugs for divers, nose clips for divers and swimmers, gloves for divers, breathing apparatus for underwater swimming; fire-extinguishing apparatus.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 10",
+          GoodsAndServices:
+            "Surgical, medical, dental and veterinary apparatus and instruments; artificial limbs, eyes and teeth; orthopaedic articles; suture materials; therapeutic and assistive devices adapted for persons with disabilities; massage apparatus; apparatus, devices and articles for nursing infants; sexual activity apparatus, devices and articles",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 11",
+          GoodsAndServices:
+            "Apparatus and installations for lighting, heating, cooling, steam generating, cooking, drying, ventilating, water supply and sanitary purposes",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 12",
+          GoodsAndServices:
+            "Vehicles; apparatus for locomotion by land, air or water",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 13",
+          GoodsAndServices:
+            "Firearms; ammunition and projectiles; explosives; fireworks.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 14",
+          GoodsAndServices:
+            "Precious metals and their alloys; jewellery, precious and semi-precious stones; horological and chronometric instruments.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 15",
+          GoodsAndServices:
+            "Musical instruments; music stands and stands for musical instruments; conductors' batons",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 16",
+          GoodsAndServices:
+            "Paper and cardboard; printed matter; bookbinding material; photographs; stationery and office requisites, except furniture; adhesives for stationery or household purposes; drawing materials and materials for artists; paintbrushes; instructional and teaching materials; plastic sheets, films and bags for wrapping and packaging; printers' type, printing blocks.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 17",
+          GoodsAndServices:
+            "Unprocessed and semi-processed rubber, gutta-percha, gum, asbestos, mica and substitutes for all these materials; plastics and resins in extruded form for use in manufacture; packing, stopping and insulating materials; flexible pipes, tubes and hoses, not of metal.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 18",
+          GoodsAndServices:
+            "Leather and imitations of leather; animal skins and hides; luggage and carrying bags; umbrellas and parasols; walking sticks; whips, harness and saddlery; collars, leashes and clothing for animals.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 19",
+          GoodsAndServices:
+            "Materials, not of metal, for building and construction; rigid pipes, not of metal, for building; asphalt, pitch, tar and bitumen; transportable buildings, not of metal; monuments, not of metal.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 20",
+          GoodsAndServices:
+            "Furniture, mirrors, picture frames; containers, not of metal, for storage or transport; unworked or semi-worked bone, horn, whalebone or mother-of-pearl; shells; meerschaum; yellow amber.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 21",
+          GoodsAndServices:
+            "Household or kitchen utensils and containers; cookware and tableware, except forks, knives and spoons; combs and sponges; brushes, except paintbrushes; brush-making materials; articles for cleaning purposes; unworked or semi-worked glass, except building glass; glassware, porcelain and earthenware.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 22",
+          GoodsAndServices:
+            "Ropes and string; nets; tents and tarpaulins; awnings of textile or synthetic materials; sails; sacks for the transport and storage of materials in bulk; padding, cushioning and stuffing materials, except of paper, cardboard, rubber or plastics; raw fibrous textile materials and substitutes therefor.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 23",
+          GoodsAndServices: "Yarns and threads for textile use",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 24",
+          GoodsAndServices:
+            "Textiles and substitutes for textiles; household linen; curtains of textile or plastic",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 25",
+          GoodsAndServices: "Clothing, footwear, headwear.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 26",
+          GoodsAndServices:
+            "Lace, braid and embroidery, and haberdashery ribbons and bows; buttons, hooks and eyes, pins and needles; artificial flowers; hair decorations; false hair.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 27",
+          GoodsAndServices:
+            "Carpets, rugs, mats and matting, linoleum and other materials for covering existing floors; wall hangings, not of textile",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 28",
+          GoodsAndServices:
+            "Games, toys and playthings; video game apparatus; gymnastic and sporting articles; decorations for Christmas trees",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 29",
+          GoodsAndServices:
+            "Meat, fish, poultry and game; meat extracts; preserved, frozen, dried and cooked fruits and vegetables; jellies, jams, compotes; eggs; milk, cheese, butter, yogurt and other milk products; oils and fats for food.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 30",
+          GoodsAndServices:
+            "Coffee, tea, cocoa and substitutes therefor; rice, pasta and noodles; tapioca and sago; flour and preparations made from cereals; bread, pastries and confectionery; chocolate; ice cream, sorbets and other edible ices; sugar, honey, treacle; yeast, bakingpowder; salt, seasonings, spices, preserved herbs; vinegar, sauces and other condiments; ice (frozen water).",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 31",
+          GoodsAndServices:
+            "Raw and unprocessed agricultural, aquacultural, horticultural and forestry products; raw and unprocessed grains and seeds; fresh fruits and vegetables, fresh herbs; natural plants and flowers; bulbs, seedlings and seeds for planting; live animals; foodstuffs and beverages for animals; malt.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 32",
+          GoodsAndServices:
+            "Beers; non-alcoholic beverages; mineral and aerated waters; fruit beverages and fruit juices; syrups and other preparations for making non-alcoholic beverages.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 33",
+          GoodsAndServices:
+            "Alcoholic beverages, except beers; alcoholic preparations for making beverages.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 34",
+          GoodsAndServices:
+            "Tobacco and tobacco substitutes; cigarettes and cigars; electronic cigarettes and oral vaporizers for smokers; smokers' articles; matches.",
+          Tag: "Goods",
+        },
+        {
+          ClassNo: "Class 35",
+          GoodsAndServices:
+            "Advertising; business management, organization and administration; office functions.",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 36",
+          GoodsAndServices:
+            "Financial, monetary and banking services; insurance services; real estate services",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 37",
+          GoodsAndServices:
+            "Construction services; installation and repair services; mining extraction, oil and gas drilling.",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 38",
+          GoodsAndServices: "Telecommunications services.",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 39",
+          GoodsAndServices:
+            "Transport; packaging and storage of goods; travel arrangement",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 40",
+          GoodsAndServices:
+            "Treatment of materials; recycling of waste and trash; air purification and treatment of water; printing services; food and drink preservation.",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 41",
+          GoodsAndServices:
+            "Education; providing of training; entertainment; sporting and cultural activities.",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 42",
+          GoodsAndServices:
+            "Scientific and technological services and research and design relating thereto; industrial analysis, industrial research and industrial design services; quality control and authentication services; design and development of computer hardware and software",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 43",
+          GoodsAndServices:
+            "Services for providing food and drink; temporary accommodation.",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 44",
+          GoodsAndServices:
+            "Medical services; veterinary services; hygienic and beauty care for human beings or animals; agriculture, aquaculture, horticulture and forestry services.",
+          Tag: "Services",
+        },
+        {
+          ClassNo: "Class 45",
+          GoodsAndServices:
+            "Legal services; security services for the physical protection of tangible property and individuals; dating services, online social networking services; funerary services; babysitting.",
+          Tag: "Services",
+        },
+      ];
+
+      function populateClassList() {
+        const classList = document.getElementById("class-list");
+        jsonData.forEach(function (item) {
+          const classNo = item.ClassNo;
+          const goodsAndServices = item.GoodsAndServices;
+          const tag = item.Tag;
+
+          const div = document.createElement("div");
+          div.className =
+            "cursor-pointer py-2 px-3 hover:bg-slate-100 class-item hidden";
+          div.dataset.class = goodsAndServices;
+
+          const p1 = document.createElement("p");
+          p1.className = "text-sm font-medium text-gray-600";
+          p1.textContent = classNo;
+
+          const p2 = document.createElement("p");
+          p2.className = "text-sm text-gray-500";
+          p2.textContent = goodsAndServices;
+
+          div.appendChild(p1);
+          div.appendChild(p2);
+
+          classList.appendChild(div);
+        });
+      }
+
+      populateClassList();
+    </script>
 
     <script>
       function downloadAsPDF() {

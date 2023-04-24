@@ -11,6 +11,7 @@ import time
 import os
 import io
 from class_check import find_similar_trademarks
+import json
 
 def string_similarity(str1, str2):
 
@@ -112,6 +113,7 @@ CORS(app)
 @app.route('/')
 def home():
     return render_template("index.html")
+
 
 @app.route('/downloadAsPDF.js')
 def downloadAsPDF():
